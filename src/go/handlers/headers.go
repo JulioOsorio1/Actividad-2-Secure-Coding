@@ -23,6 +23,6 @@ func RedirectHandler(w http.ResponseWriter, r *http.Request) {
         sanitized = "/home"
     }
 
-    w.Header().Set("Location", sanitized)
+    w.Header().Set("Location", safe)
     w.WriteHeader(http.StatusFound)
 }
