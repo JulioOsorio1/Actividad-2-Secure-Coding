@@ -17,6 +17,8 @@ public class RedirectController {
             return ResponseEntity.badRequest().build();
         }
 
-        return "redirect:" + next;
+        return ResponseEntity.status(302)
+            .header("location", next)
+            .build();
     }
 }
