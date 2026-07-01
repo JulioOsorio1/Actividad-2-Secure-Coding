@@ -14,7 +14,7 @@ public class RedirectController {
 
         // Validación estricta: solo rutas internas permitidas
         if (!ALLOWED_REDIRECTS.contains(next)) {
-            return "redirect:/dashboard";  // fallback seguro
+            return ResponseEntity.badRequest().build();
         }
 
         return "redirect:" + next;
