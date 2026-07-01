@@ -1,4 +1,3 @@
-
 @Controller
 @RequestMapping("/auth")
 public class RedirectController {
@@ -12,9 +11,12 @@ public class RedirectController {
 
     @GetMapping("/login")
     public String login(@RequestParam(defaultValue = "/dashboard") String next) {
+
+        // Validación estricta: solo rutas internas permitidas
         if (!ALLOWED_REDIRECTS.contains(next)) {
-            return "redirect:/dashboard";  // destino seguro por defecto
+            return "redirect:/dashboard";  // fallback seguro
         }
+
         return "redirect:" + next;
     }
 }
