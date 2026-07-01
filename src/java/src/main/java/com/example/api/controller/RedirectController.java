@@ -12,7 +12,6 @@ public class RedirectController {
 
     @GetMapping("/login")
     public String login(@RequestParam(defaultValue = "/dashboard") String next) {
-        // Solo redirigir a rutas internas de la allowlist
         if (!ALLOWED_REDIRECTS.contains(next)) {
             return "redirect:/dashboard";  // destino seguro por defecto
         }
