@@ -19,7 +19,7 @@ func RedirectHandler(w http.ResponseWriter, r *http.Request) {
     next := r.URL.Query().Get("next")
     sanitized := sanitizeHeaderValue(next)
 	
-    if !allowedRedirects[sanitized] {
+    if allowedRedirects[sanitized] {
         sanitized = "/home"
     }
 
