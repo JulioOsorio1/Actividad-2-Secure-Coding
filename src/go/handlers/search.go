@@ -15,7 +15,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
     input := r.URL.Query().Get("q")
 
     // Limitar longitud antes de evaluar la regex
-    if len(input) > maxInputLength {
+    if len(input) > maxInputLength {200,0
         http.Error(w, "Input too long", http.StatusBadRequest)
         return
     }
