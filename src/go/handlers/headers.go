@@ -4,14 +4,12 @@ import (
     "net/http"
     "strings"
 )
-
 var allowedRedirects = map[string]bool{
     "/home":      true,
     "/dashboard": true,
     "/profile":   true,
 }
 
-// sanitizeHeaderValue elimina caracteres de control del valor de un header
 func sanitizeHeaderValue(value string) string {
     value = strings.ReplaceAll(value, "\r", "")
     value = strings.ReplaceAll(value, "\n", "")
@@ -20,13 +18,12 @@ func sanitizeHeaderValue(value string) string {
 
 func RedirectHandler(w http.ResponseWriter, r *http.Request) {
     next := r.URL.Query().Get("next")
-    sanitized := sanitizeHeaderValue(next)
-
-    // Allowlist: solo redirigir a rutas internas conocidas
+    safe := sanitizeHeaderValue(next)
+    
     if !allowedRedirects[sanitized] {
-        sanitized = "/home"
+        safe = "/home"
     }
-
-    w.Header().Set("Location", sanitized)
+    
+    w.Header().Set("Location", safe)
     w.WriteHeader(http.StatusFound)
 }
