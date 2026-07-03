@@ -18,6 +18,11 @@ func sanitizeHeaderValue(value string) string {
 
 func RedirectHandler(w http.ResponseWriter, r *http.Request) {
     next := r.URL.Query().Get("next")
+
+       if strings.ContainsAny(next, "\r\n") {
+        next = sanitizeHeaderValue(next)
+    }
+    
     safe := sanitizeHeaderValue(next)
     
     if !allowedRedirects[sanitized] {
