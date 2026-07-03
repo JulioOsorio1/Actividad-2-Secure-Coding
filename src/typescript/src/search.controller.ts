@@ -13,7 +13,6 @@ export class SearchController {
     if (!q || q.length === 0) {
       return [];
     }
-
     if (q.length > 100) {
       throw new BadRequestException('Query demasiado larga');
     }
