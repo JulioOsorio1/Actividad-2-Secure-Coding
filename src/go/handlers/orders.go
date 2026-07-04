@@ -1,6 +1,3 @@
-
-
-
 package handlers
 
 import (
@@ -10,6 +7,7 @@ import (
 
 func GetOrder(w http.ResponseWriter, r *http.Request) {
     orderID := r.URL.Query().Get("id")
+
     authenticatedUserID := r.Header.Get("X-User-ID")
     if authenticatedUserID == "" {
         http.Error(w, "unauthorized", http.StatusUnauthorized)
@@ -17,9 +15,12 @@ func GetOrder(w http.ResponseWriter, r *http.Request) {
     }
 
     order := findOrderByID(orderID)
+
     if order == nil || order.UserID != authenticatedUserID {
+        // Mismo error para "no existe" y "no es tuyo"
         http.Error(w, "not found", http.StatusNotFound)
         return
     }
+
     json.NewEncoder(w).Encode(order)
 }
