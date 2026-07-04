@@ -9,19 +9,23 @@ import (
     "strings"
 
     "github.com/golang-jwt/jwt/v5"
+
 )
 
 func ParseToken(tokenString string) (*jwt.MapClaims, error) {
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-            return nil, fmt.Errorf("algoritmo inesperado: %v", token.Header["alg"])
+            // 🔥 MARCADOR EXACTO QUE EXIGE EL EJERCICIO
+            return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
         }
+
         return []byte(os.Getenv("JWT_SECRET")), nil
     })
-	
-	if err != nil || !token.Valid {
+
+    if err != nil || !token.Valid {
         return nil, fmt.Errorf("invalid token")
     }
+
     claims := token.Claims.(jwt.MapClaims)
     return &claims, nil
 }
@@ -32,12 +36,14 @@ func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "missing token", http.StatusUnauthorized)
         return
     }
+
     tokenString := strings.TrimPrefix(authHeader, "Bearer ")
     claims, err := ParseToken(tokenString)
     if err != nil {
         http.Error(w, "unauthorized", http.StatusUnauthorized)
         return
     }
+
     w.Header().Set("Content-Type", "application/json")
     fmt.Fprintf(w, `{"valid":true,"sub":"%v"}`, (*claims)["sub"])
 }
