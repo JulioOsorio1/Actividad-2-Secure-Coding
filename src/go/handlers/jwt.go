@@ -1,5 +1,3 @@
-
-
 package handlers
 
 import (
@@ -9,16 +7,14 @@ import (
     "strings"
 
     "github.com/golang-jwt/jwt/v5"
-
 )
 
 func ParseToken(tokenString string) (*jwt.MapClaims, error) {
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-            // 🔥 MARCADOR EXACTO QUE EXIGE EL EJERCICIO
             return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
         }
-
         return []byte(os.Getenv("JWT_SECRET")), nil
     })
 
